@@ -56,8 +56,8 @@ Add new templates to `templates/` directory. Common patterns:
 
 **6. A `.gitignore`**:
 ```
-# Don't commit actual server-specific details if you want
-# sites/*.conf
+> Don't commit actual server-specific details if you want
+> sites/*.conf
 
-# But you probably DO want to commit your sites configs
-# so remove the above line
+> But you probably DO want to commit your sites configs
+> so remove the above line
