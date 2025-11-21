@@ -13,5 +13,5 @@ if [ -L /etc/nginx/sites-enabled/"$SITE_NAME" ]; then
     sudo nginx -t && sudo systemctl reload nginx
     echo "✓ Disabled $SITE_NAME"
 else
-    echo "Site $SITE_NAME is not enabled"
+    echo "Site $SITE_NAME is not enabled."
 fi

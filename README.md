@@ -4,16 +4,12 @@ Manage multiple NGINX reverse proxy configurations across servers.
 
 ## Setup
 
-1. Clone this repo on each server:
+Clone this repo on each server:
 ```bash
-   git clone <repo-url> ~/nginx-site-manager
-   cd ~/nginx-site-manager
+   git clone <repo-url> ./nginx-site-manager
+   cd ./nginx-site-manager
 ```
 
-2. Make scripts executable:
-```bash
-   chmod +x scripts/*.sh
-```
 
 ## Usage
 
@@ -38,6 +34,12 @@ code sites/myapp.conf  # or vim, nano, etc.
 ```bash
 ./scripts/disable-site.sh myapp
 ```
+
+### Remove a site
+```bash
+./scripts/remove-site.sh myapp
+```
+
 
 ## Adding Templates
 

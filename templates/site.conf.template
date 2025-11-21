@@ -1,22 +1,35 @@
 server {
+    # http2 enables the HTTP/2 protocol, which gives you:
+    ## * Multiplexing: Multiple requests over a single TCP connection (way faster than HTTP/1.1)
+    ## * Header compression: Reduces overhead
+    ## * Server push: Can send resources before they're requested (though rarely used)
+
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name {{DOMAIN}};
 
-    ssl_certificate /etc/letsencrypt/live/{{DOMAIN}}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{DOMAIN}}/privkey.pem;
+    # If using let's encrypt
+    # ssl_certificate /etc/letsencrypt/live/{{DOMAIN}}/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/{{DOMAIN}}/privkey.pem;
+
+    # Self-signed
+    ssl_certificate     /etc/nginx/ssl/crt_{{SITE_NAME}}.pem;
+    ssl_certificate_key /etc/nginx/ssl/key_{{SITE_NAME}}.pem;
     
     # Security headers
+    ## Prevents downgrade attacks
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    ## Prevents clickjacking
     add_header X-Frame-Options "SAMEORIGIN" always;
+    ## Prevents MIME sniffing attacks
     add_header X-Content-Type-Options "nosniff" always;
 
     location / {
         proxy_pass http://{{BACKEND_HOST}}:{{BACKEND_PORT}};
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host; # Passes the original domain name to your backend.
+        proxy_set_header X-Real-IP $remote_addr; # The actual client's IP address
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; # Chain of proxy IPs. Appends the client IP to any existing XFF header 
+        proxy_set_header X-Forwarded-Proto $scheme; # Tells your backend whether the original request was http or https.
     }
 
     access_log /var/log/nginx/{{SITE_NAME}}_access.log;

@@ -15,6 +15,15 @@ if [ ! -f "$SITE_FILE" ]; then
     exit 1
 fi
 
+# Ensure SSL folder exists
+if [ ! -d "/etc/nginx/ssl" ]; then
+    echo "Creating /etc/nginx/ssl folder for SSL certificates."
+    sudo mkdir -p /etc/nginx/ssl
+fi
+
+openssl req -new -x509 -keyout /etc/nginx/ssl/key_${SITE_NAME}.pem -out /etc/nginx/ssl/crt_${SITE_NAME}.pem -days 365 -nodes \
+  -subj "/C=US/ST=Colorado/L=Denver/O=CU Anschutz/OU=QTIM/CN=${DOMAIN}"
+
 echo "Deploying $SITE_NAME..."
 
 # Copy to sites-available
